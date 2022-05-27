@@ -17,11 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false
-      },
-      order_id: {
-        type: DataTypes.INTEGER
       }
-    }
+    },
+    { nameModel: 'invoice' }
   )
   return invoice
 }

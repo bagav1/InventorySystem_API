@@ -22,8 +22,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      invoice_id: {
-        type: DataTypes.INTEGER
+      status: {
+        type: DataTypes.STRING,
+        allowNull: false
       }
     }
   )

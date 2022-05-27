@@ -5,7 +5,9 @@ const Role = require('./Role.model')
 const Product = require('./product.model')
 const Order = require('./order.model')
 const Invoice = require('./invoice.model')
+const OrderInvoice = require('./order_invoice.model')
 
+/* Creating a new instance of Sequelize --initializing database. */
 const sequelize = new Sequelize(`postgres://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}:5432/${dbConfig.database}`)
 try {
   sequelize.authenticate({ logging: false }).then(() => {
@@ -15,22 +17,20 @@ try {
   console.error('Unable to connect to the database:', error)
 }
 
+/* Creating a new instance of diferents models. */
 const tUser = User(sequelize, Sequelize)
 const tRole = Role(sequelize, Sequelize)
 const tProduct = Product(sequelize, Sequelize)
 const tOrder = Order(sequelize, Sequelize)
 const tInvoice = Invoice(sequelize, Sequelize)
+const tOrderInvoice = OrderInvoice(sequelize, Sequelize)
 
+/* Creating a foreign key in the diferents tables. */
 tUser.belongsTo(tRole, { foreignKey: 'role_id' })
-tRole.hasMany(tUser, { foreignKey: 'role_id' })
 tOrder.belongsTo(tUser, { foreignKey: 'user_id' })
-tUser.hasMany(tOrder, { foreignKey: 'user_id' })
 tOrder.belongsTo(tProduct, { foreignKey: 'product_id' })
-tProduct.hasMany(tOrder, { foreignKey: 'product_id' })
 tInvoice.belongsTo(tUser, { foreignKey: 'user_id' })
-tUser.hasMany(tInvoice, { foreignKey: 'user_id' })
-tInvoice.belongsTo(tOrder, { foreignKey: 'order_id' })
-tOrder.hasMany(tInvoice, { foreignKey: 'order_id' })
+tInvoice.belongsToMany(tOrder, { foreignKey: 'invoice_id', through: tOrderInvoice })
 
 sequelize.sync({ force: false, logging: false }).then(() => {
   console.log('Database & tables created!')
@@ -41,5 +41,6 @@ module.exports = {
   tRole,
   tProduct,
   tOrder,
-  tInvoice
+  tInvoice,
+  tOrderInvoice
 }
