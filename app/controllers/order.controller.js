@@ -19,6 +19,7 @@ const create = async (req, res) => {
       requested. */
       const product = await tProduct.findOne({ where: { id: req.body.product_id, available_quantity: { [Op.gte]: req.body.quantity } } })
       if (!product) return res.json({ error: 'Insufficient inventory' })
+
       /* Updating the product's available quantity. */
       product.update({ available_quantity: product.available_quantity - req.body.quantity })
       req.body.total = Number(product.price * req.body.quantity)
@@ -31,6 +32,7 @@ const create = async (req, res) => {
       requested. */
       const product = await tProduct.findOne({ where: { id: req.body.product_id, available_quantity: { [Op.gte]: req.body.quantity } } })
       if (!product) return res.json({ error: 'Insufficient inventory' })
+
       /* Updating the product's available quantity. */
       product.update({ available_quantity: product.available_quantity - req.body.quantity })
       req.body.total = Number(product.price * req.body.quantity)

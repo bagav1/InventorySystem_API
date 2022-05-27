@@ -79,6 +79,9 @@ const update = async (req, res) => {
  * @returns The token is being returned.
  */
 const login = async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() })
+
   const user = await tUser.findOne({ where: { email: req.body.email } })
   if (!user) {
     return res.status(400).json({ error: 'Wrong email or password' })
